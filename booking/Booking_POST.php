@@ -1,10 +1,9 @@
 <?php
     header('Content-Type: application/json');
-    include("../sql_connect.php");
     include("../validation.php");
-
-    $link = mysqli_connect($host, $sql_user, $sql_password, $database) 
-    or die("Ошибка ".mysqli_error($link));
+    require_once("../DataBase/sql_connect.php");
+    $DB = new DataBase();
+    $DB->sql_con();
     
     $flight_from = $data["flight_from"];
     $flight_back = $data["flight_back"];
@@ -13,7 +12,7 @@
     $date_back = $flight_back["date"];
 
     $sql = 'SELECT code, id FROM bookings WHERE flight_from='.$flight_from["id"].' AND flight_back='.$flight_back["id"].' AND date_from="'.$date_from.'" AND date_back="'.$date_back.'"';
-    $result = mysqli_fetch_array(mysqli_query($link, $sql));
+    $result = mysqli_fetch_array($DB->result($sql));
     
     if($result == NULL){
         $iserror = true;
@@ -22,7 +21,7 @@
         foreach ($passengers as $p) {
             $now_date = date("Y-m-d H:i:s");
             $sql = 'INSERT INTO passengers(updated_at, booking_id, first_name, last_name, birth_date, document_number, created_at) VALUES ("'.date("Y-m-d H:i:s").'", "'.$result["id"].'", "'.$p["first_name"].'", "'.$p["last_name"].'", "'.$p["birth_date"].'", "'.$p["document_number"].'", "'.date("Y-m-d H:i:s").'")';
-            $result_insert=mysqli_query($link, $sql);
+            $result_insert=$DB->result($sql);
         }
     }
 
@@ -46,7 +45,7 @@
             )
         );
     }
-    mysqli_close($link); 
+    $DB->close();
 
     
 

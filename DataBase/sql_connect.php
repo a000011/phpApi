@@ -20,6 +20,14 @@
         public function close(){
             mysqli_close($this->$link);
         }
+
+        public function fetch_array($res){
+            return mysqli_fetch_array($res);
+        }
+
+        // public function fetch_array(){
+        //     return mysqli_fetch_array($this->$link);
+        // }
     }
 
 ?>

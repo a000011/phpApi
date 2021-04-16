@@ -1,12 +1,13 @@
 <?php
-    include("../sql_connect.php");
     header('Content-Type: application/json');
+
+    require_once("../DataBase/sql_connect.php");
+    $DB = new DataBase();
+    
+    $DB->sql_con();
 
     $items = array();
     $arr_moscow = array("oscow", "moscow", "Sheremetyevo", "Shere", "SVO");
-
-    $link = mysqli_connect($host, $sql_user, $sql_password, $database) 
-    or die("Ошибка ".mysqli_error($link));
 
     if(isset($_GET["name"])){
         $sql = 'SELECT city, name, iata FROM airports WHERE name="'.$_GET["name"].'"';
@@ -18,10 +19,10 @@
 
 
     if(array_search(strtolower($air_name), $arr_moscow) !== false){     
-        $result = mysqli_fetch_array(mysqli_query($link, $sql));         
+        $result = mysqli_fetch_array($DB->result($sql));         
     }
     else{
-        $result = mysqli_fetch_array(mysqli_query($link, $sql));         
+        $result = mysqli_fetch_array($DB->result($sql));         
     }
    
     if($result !== NULL){
@@ -36,5 +37,5 @@
             )
         )
     );
-    mysqli_close($link);   
+    $DB->close();  
 ?>

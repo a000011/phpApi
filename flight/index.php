@@ -63,7 +63,6 @@
 
     function get_airport($DB, $item){//поиск аэропортап в бд
         $sql = 'SELECT * FROM airports WHERE iata="'.$item.'"';
-        
         return mysqli_fetch_array($DB->result($sql));
     }
 
