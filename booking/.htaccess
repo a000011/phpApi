@@ -3,5 +3,5 @@
     RewriteBase /booking/
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule (.*) /Api/booking/index.php?code=$1 [QSA,L]
+    RewriteRule (.*) /phpApi/booking/index.php?code=$1 [QSA,L]
 </IfModule>

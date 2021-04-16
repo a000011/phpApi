@@ -1,6 +1,6 @@
 <?php
-    header('Content-Type: application/json');
     include("../validation.php");
+    header('Content-Type: application/json');
     require_once("../DataBase/sql_connect.php");
     $DB = new DataBase();
     $DB->sql_con();
