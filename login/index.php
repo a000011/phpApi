@@ -39,7 +39,7 @@
         }
         else{
             $status = 200;
-            $user_api_token = random_int(1000, 99999999);
+            $user_api_token = random_int(10000000, 99999999);
             echo json_encode(
                 array(
                     "data" => array(
