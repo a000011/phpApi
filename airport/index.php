@@ -1,10 +1,10 @@
 <?php
     header('Content-Type: application/json');
 
-    require_once("../DataBase/sql_connect.php");
-    $DB = new DataBase();
+    require '../DataBase/DataBase.php';
+
+    $db = DataBase\MySQL::get();
     
-    $DB->sql_con();
 
     $items = array();
     $arr_moscow = array("oscow", "moscow", "Sheremetyevo", "Shere", "SVO");
@@ -19,10 +19,10 @@
 
 
     if(array_search(strtolower($air_name), $arr_moscow) !== false){     
-        $result = mysqli_fetch_array($DB->result($sql));         
+        $result = mysqli_fetch_array($db::result($sql));         
     }
     else{
-        $result = mysqli_fetch_array($DB->result($sql));         
+        $result = mysqli_fetch_array($db::result($sql));         
     }
    
     if($result !== NULL){
@@ -37,5 +37,4 @@
             )
         )
     );
-    $DB->close();  
 ?>

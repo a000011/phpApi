@@ -1,7 +1,7 @@
 <?php
     if(!isset($_GET['code'])){
         //бронирование
-        include("Booking_POST.php");
+        include("Booking.php");
     }
     else
     {

@@ -1,12 +1,10 @@
 <?php
-    require '../DataBase/DataBase.php';
     require '../validation.php';
+    require '../DataBase/DataBase.php';
 
     $db = DataBase\MySQL::get();
-    $db::test();
     $sql = 'SELECT * FROM users WHERE phone="'.$user_phone.'" AND password="'.$user_password.'"';
     $result = $db::result($sql);
-    //ошибка подключения
     if ($result == false) {
         print("Произошла ошибка при выполнении запроса");
     } 

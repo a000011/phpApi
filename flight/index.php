@@ -1,9 +1,8 @@
 <?php
     header('Content-Type: application/json');
-    require_once("../DataBase/sql_connect.php");
-    $DB = new DataBase();
-    
-    $DB->sql_con();
+    require '../DataBase/DataBase.php';
+
+    $db = DataBase\MySQL::get();
 
     $iserror=false;
     $errors=array();
@@ -18,13 +17,13 @@
         $errors = array_merge($errors, array("to" => "field 'to' is incorrect"));
     }
 
-    $from_arr = get_airport($DB, $_GET["from"]);
-    $to_arr = get_airport($DB, $_GET["to"]);
+    $from_arr = get_airport($db, $_GET["from"]);
+    $to_arr = get_airport($db, $_GET["to"]);
     $result_from = array();
     $result_to = array();
 
     $sql =  "SELECT * FROM flights WHERE from_id = '".$from_arr["id"]."' AND to_id = '".$to_arr["id"]."'"; 
-    $result = $DB->result($sql);
+    $result = $db::result($sql);
 
     
 
@@ -33,7 +32,7 @@
     }   
     
     $sql =  "SELECT * FROM flights WHERE from_id = '".$to_arr["id"]."' AND to_id = '".$from_arr["id"]."'";
-    $result = $DB->result($sql);
+    $result = $db::result($sql);
 
     while($row = mysqli_fetch_array($result)){//заполнение массива полетов из пункта назначения
         array_push($result_to, fill_big_arr($row, $to_arr, $from_arr));
@@ -59,11 +58,10 @@
     }else{
         echo json_encode($flight);
     }
-    $DB->close();
 
-    function get_airport($DB, $item){//поиск аэропортап в бд
+    function get_airport($db, $item){//поиск аэропортап в бд
         $sql = 'SELECT * FROM airports WHERE iata="'.$item.'"';
-        return mysqli_fetch_array($DB->result($sql));
+        return mysqli_fetch_array($db::result($sql));
     }
 
     function fill_arr($arr, $time){
