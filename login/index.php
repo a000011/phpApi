@@ -1,13 +1,11 @@
 <?php
-    include("../validation.php");
+    require '../DataBase/DataBase.php';
+    require '../validation.php';
 
-    require_once("../DataBase/sql_connect.php");
-    $DB = new DataBase();
-
-    $DB->sql_con();
-
+    $db = DataBase\MySQL::get();
+    $db::test();
     $sql = 'SELECT * FROM users WHERE phone="'.$user_phone.'" AND password="'.$user_password.'"';
-    $result = $DB->result($sql);
+    $result = $db::result($sql);
     //ошибка подключения
     if ($result == false) {
         print("Произошла ошибка при выполнении запроса");
@@ -53,9 +51,6 @@
             );
         }
     }
-    // выполняем операции с базой данных
-    // закрываем подключение
-    $DB->close();
     http_response_code($status);
 
     // {
