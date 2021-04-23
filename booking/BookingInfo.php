@@ -7,20 +7,15 @@
 
 
     if($_SERVER['REQUEST_METHOD'] == 'PATCH'){
-
         $data = json_decode(file_get_contents('php://input'), true);//Принимаю PATCH запрос
-    
         $sql = 'SELECT passengers.id, passengers.place_from, passengers.place_back
         FROM bookings
         INNER JOIN passengers ON bookings.id=passengers.booking_id
         WHERE CODE="'.explode("/", $_GET['code'])[0].'"';
-    
         $result = $db::result($sql);
         $is_error = false;   
-    
         $updateRequest='';
         switch($data['type']){
-    
             case 'from':
                 while($row = $db::fetch_array($result)){
                     if($row['place_from'] == $data['seat']){
@@ -65,7 +60,7 @@
             $db::result($updateRequest);
             $sql = 'SELECT * FROM passengers WHERE id='.$data['passenger'];
             $result = arrayParcing($db::fetch_array($db::result($sql)));
-            http_response_code(422);
+            http_response_code(200);
             echo json_encode(
                 array(
                     "data" => $result
@@ -84,7 +79,7 @@
             );
         }
     }
-    
+
 
     function arrayParcing($array){
         //этот метод убирает ненужные ключи из массива
