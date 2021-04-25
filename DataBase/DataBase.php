@@ -30,12 +30,8 @@
             return self::$instances[$cls];
         }
 
-        public static function test()
-        {
-            echo "hello";
-        }
-
         public static function result($sql){
+            //var_dump( mysqli_query(self::$link, $sql));
             return mysqli_query(self::$link, $sql);
         }
 

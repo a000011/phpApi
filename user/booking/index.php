@@ -7,14 +7,10 @@
 
     $auth_header = getAuthorizationHeader();
 
-    // TODO: добавить вывод букинга пользователя
-
-
     if (preg_match('/Bearer\s(\S+)/', $auth_header, $matches)) {
-        $search_token="SELECT * FROM users WHERE api_token='$matches[1]'";
-        $result = $db::result($search_token);
-        if($result = $db::fetch_array($result)){
-            echo $result['first_name']." ".$result['last_name'];
+        $APITOKEN = $matches[1];
+        if($booking = getBookingId($APITOKEN, $db)){
+            echo json_encode(getFlights($booking['booking_id'], $db));
         }
         else{
             unAuth();
@@ -24,6 +20,29 @@
         unAuth();
     }
     
+    function getFlights($bookingId, $DB){
+        $bookingRequest = "SELECT * FROM bookings WHERE id=$bookingId";
+        $booking = arrayParcing($DB::fetch_array($DB::result($bookingRequest)));
+        $flightFrom = getFlightInfo($booking['flight_from'], $DB);
+        $flightFrom['from'] =  getAirportInfo($flightFrom['from_id'], $DB);
+        $flightFrom['to'] =  getAirportInfo($flightFrom['to_id'], $DB);
+
+        $flightBack = getFlightInfo($booking['flight_back'], $DB);
+        $flightBack['from'] =  getAirportInfo($flightBack['from_id'], $DB);
+        $flightBack['to'] =  getAirportInfo($flightBack['to_id'], $DB);
+        return array(
+            "data"=> array(
+                "code" => 200,
+                "cost" => "",
+                "flights" => array(
+                    $flightFrom,
+                    $flightBack
+                ),
+                "passengers" => $passengers
+            )
+        );
+    }
+
     function getAuthorizationHeader(){
         $headers = null;
         if (isset($_SERVER['Authorization'])) {
@@ -48,5 +67,34 @@
             "message"=> "Unauthorized"
         ));
         echo json_encode($error);
+    }
+
+    function getFlightInfo($Id, $DB){
+        $flightRequest = "SELECT * FROM flights WHERE id={$Id}";
+        return arrayParcing(mysqli_fetch_array($DB::result($flightRequest)));
+    }
+    function getBookingId($apiToken, $DB){
+        $bookingRequest =  "
+            SELECT passengers.booking_id
+            FROM users
+            INNER JOIN passengers ON users.document_number=passengers.document_number
+            WHERE api_token='$apiToken'";
+        return arrayParcing($DB::fetch_array($DB::result($bookingRequest)));
+    }
+    function getAirportInfo($Id, $DB){
+        $airportRequest = "SELECT * FROM airports WHERE id={$Id}";
+        return arrayParcing(mysqli_fetch_array($DB::result($airportRequest)));
+    }
+
+    function arrayParcing($array){
+        $parcedArray = [];
+        if(!empty($array)){
+            foreach(array_keys($array) as $key){
+                if(!is_int($key)){
+                    $parcedArray[$key] = $array[$key];
+                }
+            }
+        }
+        return $parcedArray;
     }
 ?>

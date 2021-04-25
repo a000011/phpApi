@@ -1,6 +1,6 @@
 <?
     header('Content-Type: application/json');
-  
+
     require '../DataBase/DataBase.php';
 
     $db = DataBase\MySQL::get();
@@ -40,7 +40,15 @@
         )
     );
 
-  
+    function getFlightInfo($Id, $DB){
+        $flightRequest = "SELECT * FROM flights WHERE id={$Id}";
+        return arrayParcing(mysqli_fetch_array($DB::result($flightRequest)));
+    }
+
+    function getAirportInfo($Id, $DB){
+        $airportRequest = "SELECT * FROM airports WHERE id={$Id}";
+        return arrayParcing(mysqli_fetch_array($DB::result($airportRequest)));
+    }
 
     function getFlightInfo($Id, $DB){
         $flightRequest = "SELECT * FROM flights WHERE id={$Id}";
