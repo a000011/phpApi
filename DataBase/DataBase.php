@@ -1,14 +1,11 @@
 <?php 
     namespace DataBase;
-
+    
+    require '../configuration.php';
+    use Configuration;
     class MySQL{
 
         private static $instances = [];
-        private $port = 3306;
-        private $database = 'module2'; // имя базы данных
-        private $sql_user = 'root'; // имя пользователя
-        private $host = 'localhost'; // адрес сервера 
-        private $sql_password = 'root'; // пароль
         private static $link;
 
         protected function __construct() { }
@@ -24,7 +21,12 @@
         {
             $cls = static::class;
             if (!isset(self::$instances[$cls])) {
-                self::$link = mysqli_connect('localhost', 'root', 'root', "module2");
+                self::$link = mysqli_connect(
+                    Configuration\Config::$host,
+                    Configuration\Config::$sql_user,
+                    Configuration\Config::$sql_password,
+                    Configuration\Config::$database
+                );
                 self::$instances[$cls] = new static();
             }
             return self::$instances[$cls];
