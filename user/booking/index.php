@@ -37,8 +37,7 @@
                 "flights" => array(
                     $flightFrom,
                     $flightBack
-                ),
-                "passengers" => $passengers
+                )
             )
         );
     }

@@ -5,9 +5,13 @@
 
     $db = DataBase\MySQL::get();
     header('Content-Type: application/json');
-
     $postData = file_get_contents('php://input');
-    $data = json_decode($postData, true);
+    if(empty($postData)){
+        $data = $_POST;
+    }
+    else{
+        $data = json_decode($postData, true);   
+    } 
     $status = 422;
     $FIELDS = array(
         "first_name",
@@ -42,9 +46,8 @@
                 if(!((strlen($data[$value]) < 15 && strlen($data[$value]) > 9) && (is_numeric($data[$value])))){       
                     array_push($errors['error']['errors'], array("$value" => array("incorrect phone")));
                 }
-                $phoneRequest = "SELECT * FROM users WHERE phone=$data[$value]";
-                if($result = $db::fetch_array($db::result($phoneRequest))){
-                    array_push($errors['error']['errors'], array("$value" => array("$value is registed")));
+                if($result = $db::validatePhone($data[$value])){
+                    array_push($errors['error']['errors'], $result);
                 }                
                 break;
 

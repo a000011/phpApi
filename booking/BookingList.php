@@ -50,16 +50,6 @@
         return arrayParcing(mysqli_fetch_array($DB::result($airportRequest)));
     }
 
-    function getFlightInfo($Id, $DB){
-        $flightRequest = "SELECT * FROM flights WHERE id={$Id}";
-        return arrayParcing(mysqli_fetch_array($DB::result($flightRequest)));
-    }
-
-    function getAirportInfo($Id, $DB){
-        $airportRequest = "SELECT * FROM airports WHERE id={$Id}";
-        return arrayParcing(mysqli_fetch_array($DB::result($airportRequest)));
-    }
-
     function arrayParcing($array){
         $parcedArray = [];
         foreach(array_keys($array) as $key){

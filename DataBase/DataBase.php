@@ -1,8 +1,9 @@
 <?php 
     namespace DataBase;
     
-    require '../configuration.php';
+    require dirname(__FILE__).'\..\configuration.php';
     use Configuration;
+    
     class MySQL{
 
         private static $instances = [];
@@ -39,6 +40,16 @@
 
         public static function fetch_array($res){
             return mysqli_fetch_array($res);
+        }
+
+        public static function validatePhone($value){
+            $phoneRequest = "SELECT * FROM users WHERE phone=$value";
+            if($result = self::fetch_array(self::result($phoneRequest))){
+                return array("phone" => array("phone is registed"));
+            }
+            else{
+                return False;
+            }
         }
 
         public static function registerUser($data){
