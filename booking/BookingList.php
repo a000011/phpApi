@@ -40,7 +40,6 @@
         )
     );
 
-  
 
     function getFlightInfo($Id, $DB){
         $flightRequest = "SELECT * FROM flights WHERE id={$Id}";

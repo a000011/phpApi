@@ -1,10 +1,8 @@
 <?php
     header('Content-Type: application/json');
-
     require '../DataBase/DataBase.php';
 
     $db = DataBase\MySQL::get();
-    
 
     $items = array();
     $arr_moscow = array("oscow", "moscow", "Sheremetyevo", "Shere", "SVO");
@@ -24,10 +22,8 @@
     else{
         $result = mysqli_fetch_array($db::result($sql));         
     }
-   
     if($result !== NULL){
-       $items = array("name" => $result["name"], "iata" => "$result[iata]");
-
+        $items = array("name" => $result["name"], "iata" => "$result[iata]");
     }
 
     echo json_encode(
