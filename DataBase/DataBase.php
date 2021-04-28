@@ -63,5 +63,10 @@
             VALUES ('$first_name','$last_name','$user_phone','$user_password','$document_number', '1232233','$date','$date')";
             return self::result($sql);
         }
+
+        public static function authUser($data){
+            $sql = 'SELECT * FROM users WHERE phone="'.$data['phone'].'" AND password="'.$data['password'].'"';
+            return self::result($sql);    
+        }
     }
 ?>

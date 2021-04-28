@@ -1,4 +1,5 @@
 <?
+echo "asdasd";
     header('Content-Type: application/json');
 
     require '../DataBase/DataBase.php';
@@ -20,12 +21,12 @@
 
     $passengersRequest = "SELECT * FROM passengers WHERE booking_id={$booking['id']}";
     $passengersResult =  $db::result($passengersRequest);
-    $passengers = [];
+    $passengers = array();
     //var_dump(arrayParcing($flightFrom));
     while ($row = mysqli_fetch_assoc($passengersResult)) {
         array_push($passengers, $row);
     }
-
+    
     echo json_encode(
         array(
             "data"=> array(

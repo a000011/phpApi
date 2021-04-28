@@ -1,52 +1,102 @@
 <?php
-    if(isset($data['birth_date'])){
-        if(!validateDate($data['birth_date'])){
-            $iserror = true;
-            $errors = array_merge($errors, array("birth_date" => "incorrect birth date"));
-        }
-    }
-    if(isset($user_password)){
-        //
-        // проверка пароль
-        //
-        
-    }    
+    namespace Validation;
     
+    class Validate{
+        private static $instances = [];
 
-    function generateRandomString(int $length = 5) {//u
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        protected function __construct() { }
+    
+        protected function __clone() { }
+    
+        public function __wakeup()
+        {
+            throw new \Exception("Cannot unserialize a singleton.");
         }
-        return $randomString;
-    }
 
-    function validateName(string $key, string $name){
-        $errors = array($key => array());
-        $iserror = False;
-        if(!empty($name)){
-            if((strlen($name) < 2) || (strlen($name) > 30)){
-                $iserror = True;
-                array_push($errors[$key], "incorrect length");
+        public static function get(): Validate
+        {
+            $cls = static::class;
+            if (!isset(self::$instances[$cls])) {
+                self::$instances[$cls] = new static();
             }
+            return self::$instances[$cls];
         }
-        else{
-            $iserror = True;
-            array_push($errors[$key], "Field is empty");
-        }
-        if(!$iserror){
-            return False;
-        }
-        else{
+
+        public static function fieldsValidate($FIELDS, $db, $data): array{
+            $errors = array(
+                "error" => array(
+                    "code" => "",
+                    "message" => "Validation error",
+                    "errors" => array()
+                )
+            );
+            // * validation
+            foreach ($FIELDS as $value) {
+                switch ($value) {
+                    case 'first_name':
+                        if($error = self::validateName($value, strval($data[$value]))){
+                            array_push($errors['error']['errors'], $error);
+                        }
+                        break;
+                    
+                    case 'last_name':
+                        if($error = self::validateName($value, strval($data[$value]))){
+                            array_push($errors['error']['errors'], $error);
+                        }
+                        break;
+        
+                    case 'phone':
+                        if(!((strlen($data[$value]) < 15 && strlen($data[$value]) > 9) && (is_numeric($data[$value])))){       
+                            array_push($errors['error']['errors'], array("$value" => array("incorrect phone")));
+                        }
+                        if($result = $db::validatePhone($data[$value])){
+                            array_push($errors['error']['errors'], $result);
+                        }                
+                        break;
+        
+                    case 'document_number':
+                        if(!((strlen($data[$value]) == 10) && (is_numeric($data[$value])))){
+                            array_push($errors['error']['errors'], array("$value" => array("incorrect document number")));
+                        }
+                        break;
+        
+                    case 'password':
+                        if(strlen($data[$value]) > 40 || strlen($data[$value]) < 8){
+                            array_push($errors['error']['errors'], array("$value" => array("incorrect $value")));
+                        }
+                        break;
+                }
+            }
             return $errors;
         }
+
+        public static function validateName(string $key, string $name){
+            $errors = array($key => array());
+            $iserror = False;
+            if(!empty($name)){
+                if((strlen($name) < 2) || (strlen($name) > 30)){
+                    $iserror = True;
+                    array_push($errors[$key], "incorrect length");
+                }
+            }
+            else{
+                $iserror = True;
+                array_push($errors[$key], "Field is empty");
+            }
+            if(!$iserror){
+                return False;
+            }
+            else{
+                return $errors;
+            }
+        }
+    
+        // function validateDate($date, $format = 'Y-m-d H:i:s')//date validation
+        // {
+        //     $d = DateTime::createFromFormat($format, $date);
+        //     return $d && $d->format($format) == $date;
+        // }
     }
 
-    function validateDate($date, $format = 'Y-m-d H:i:s')//date validation
-    {
-        $d = DateTime::createFromFormat($format, $date);
-        return $d && $d->format($format) == $date;
-    }
+    
 ?>

@@ -3,6 +3,10 @@
     require '../DataBase/DataBase.php';
 
     $db = DataBase\MySQL::get();
+    // !   не риализовано
+    // ! - date1 (2020-10-01)
+    // ! - date2 (2020-10-13)
+    // ! - passengers (2)
 
     $iserror=false;
     $errors=array();

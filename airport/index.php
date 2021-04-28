@@ -7,13 +7,15 @@
     $items = array();
     $arr_moscow = array("oscow", "moscow", "Sheremetyevo", "Shere", "SVO");
 
-    if(isset($_GET["name"])){
-        $sql = 'SELECT city, name, iata FROM airports WHERE name="'.$_GET["name"].'"';
-    }elseif (isset($_GET["city"])) {
-        $sql = 'SELECT city, name, iata FROM airports WHERE city="'.$_GET["city"].'"';
-    }elseif (isset($_GET["iata"])) {
-        $sql = 'SELECT city, name, iata FROM airports WHERE iata="'.$_GET["iata"].'"';
+    if(isset($_GET["query"])){
+        $sql = 'SELECT city, name, iata FROM airports WHERE iata="'.$_GET["query"].'"';
     }
+        // else if (isset($_GET["city"])) {
+        //     $sql = 'SELECT city, name, iata FROM airports WHERE city="'.$_GET["city"].'"';
+        // }
+        // else if (isset($_GET["iata"])) {
+        //     $sql = 'SELECT city, name, iata FROM airports WHERE iata="'.$_GET["iata"].'"';
+        // }
 
 
     if(array_search(strtolower($air_name), $arr_moscow) !== false){     

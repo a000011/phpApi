@@ -1,7 +1,16 @@
 <?php
     header('Content-Type: application/json');
-    include("../validation.php");
+
     require '../DataBase/DataBase.php';
+
+    $postData = file_get_contents('php://input');
+
+    if(empty($postData)){
+        $data = $_POST;
+    }
+    else{
+        $data = json_decode($postData, true);   
+    }
 
     $db = DataBase\MySQL::get();
     
