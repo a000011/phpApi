@@ -68,5 +68,10 @@
             $sql = 'SELECT * FROM users WHERE phone="'.$data['phone'].'" AND password="'.$data['password'].'"';
             return self::result($sql);    
         }
+
+        public static function authUserByToken($token){
+            $sql = "SELECT * FROM users WHERE api_token='$token'";
+            return self::result($sql);    
+        }
     }
 ?>
