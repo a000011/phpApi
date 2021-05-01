@@ -1,4 +1,4 @@
-<?
+<?php
     header('Content-Type: application/json');
 
     require '../DataBase/DataBase.php';

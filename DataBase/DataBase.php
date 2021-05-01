@@ -1,8 +1,8 @@
 <?php 
     namespace DataBase;
     
-    require dirname(__FILE__).'\..\configuration.php';
-    use Configuration;
+    require dirname(__FILE__).'/../Configuration.php';
+    use Configuration;  
     
     class MySQL{
 

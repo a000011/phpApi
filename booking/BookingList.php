@@ -1,4 +1,4 @@
-<?
+<?php
 echo "asdasd";
     header('Content-Type: application/json');
 
